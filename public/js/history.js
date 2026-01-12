@@ -82,17 +82,11 @@ $(document).ready(function () {
 							<button type="button" class="btn btn-info btn-sm btn-compare" data-history="${JSON.stringify(row).replace(/"/g, '&quot;')}" title="对比数据">
 								<i class="bi bi-eye"></i>
 							</button>
-							<button type="button" class="btn btn-warning btn-sm btn-rollback ms-1" data-history-id="${row.historyId}" title="回滚数据">
-								<i class="bi bi-arrow-clockwise"></i>
-							</button>
 						`;
 				},
 				events: {
 					'click .btn-compare': function (e, value, row, index) {
 						showCompareModal(row);
-					},
-					'click .btn-rollback': function (e, value, row, index) {
-						rollbackData(row.historyId);
 					}
 				}
 			}
@@ -170,15 +164,4 @@ function generateJsonHtml(json) {
 	}
 	html += '</table>';
 	return html;
-}
-
-/**
- * 回滚数据
- * @param {number} historyId - 历史记录ID
- */
-function rollbackData(historyId) {
-	if (confirm('确定要回滚此操作吗？此操作不可撤销！')) {
-		console.log('回滚操作，historyId:', historyId);
-		alert('回滚功能已触发，historyId: ' + historyId);
-	}
 }

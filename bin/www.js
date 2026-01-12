@@ -9,10 +9,9 @@ app.set('port', port);
 
 const http = require('http');
 const server = http.createServer(app);
-
-server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+server.listen(port);
 
 function normalizePort(val) {
 	let port = parseInt(val, 10);
@@ -44,28 +43,23 @@ function onError(error) {
 function onListening() {
 	let addr = server.address();
 	let bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-	logger.info('Listening on ' + bind);
+	logger.info('>>>> HTTP server is listening on ' + bind);
 }
 
 async function cleanup() {
-	try {
-		logger.info('****——关闭HTTP服务器中...');
-		server.close(async (err) => {
-			logger.info('****——关闭数据库连接池中...');
-			await closeCustomConnectionPool();
-			await closeDBConnection();
+	logger.info('>>>> closing 2 database connections...');
+	await closeCustomConnectionPool();
+	await closeDBConnection();
 
-			if (err) {
-				logger.warn('XXXX——关闭HTTP服务器失败，强制退出:', err);
-				process.exit(1);
-			}
-			logger.info('****——HTTP服务器已关闭，正常退出当前进程');
-			process.exit(0);
-		});
-	} catch (err) {
-		logger.fatal('XXXX——清理资源失败，强制退出当前进程:', err);
-		process.exit(1);
-	}
+	logger.info('>>>> closing the HTTP server...');
+	server.close(async (err) => {
+		if (err) {
+			logger.error(err, '##### fail to close the HTTP server, exit with code 1');
+			process.exit(1);
+		}
+		logger.info('<<<< HTTP server closed, exit with code 0');
+		process.exit(0);
+	});
 }
 
 // 监听终止信号：SIGINT（Ctrl+C）、SIGTERM（kill命令）
@@ -73,11 +67,11 @@ process.on('SIGINT', cleanup);
 process.on('SIGTERM', cleanup);
 // 处理未捕获的异常
 process.on('uncaughtException', (err) => {
-	logger.error('XXXX——未捕获的异常，强制退出当前进程:', err);
+	logger.error(err, '###### uncaughtException, exit with code 1:');
 	cleanup().then(() => process.exit(1));
 });
 // 处理未捕获的Promise拒绝
 process.on('unhandledRejection', (reason) => {
-	logger.error('XXXX——未处理的Promise拒绝，强制退出当前进程:', reason);
+	logger.error(reason, '###### unhandledRejection, exit with code 1:');
 	cleanup().then(() => process.exit(1));
 });

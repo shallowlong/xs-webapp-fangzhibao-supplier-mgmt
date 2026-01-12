@@ -31,27 +31,27 @@ setTimeout(() => {
 async function closeCustomConnectionPool() {
 	try {
 		await customConnectionPool.end();
-		logger?.info('自定义连接池已成功关闭');
+		logger?.info('>>>> the custom connection pool has been closed');
 	} catch (err) {
-		logger?.error('自定义关闭连接池失败：', err);
+		logger?.error(err, '###### fail to close the custom connection pool');
 	}
 }
 
 async function testDBConnection() {
 	try {
 		await sequelize.authenticate();
-		logger?.info('sequelize数据库连接成功');
+		logger?.info('>>>> sequelize database connection is successful');
 	} catch (error) {
-		logger?.error('sequelize数据库连接失败:', error);
+		logger?.error(error, '###### sequelize database connection failed');
 	}
 }
 
 async function closeDBConnection() {
 	try {
 		await sequelize.close();
-		logger?.info('成功关闭sequelize数据库');
+		logger?.info('>>>> sequelize database connection has been closed');
 	} catch (error) {
-		logger?.error('关闭sequelize数据库失败:', error);
+		logger?.error(error, '###### fail to close the sequelize database connection');
 	}
 }
 

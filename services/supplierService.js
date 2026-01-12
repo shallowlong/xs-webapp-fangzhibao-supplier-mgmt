@@ -51,8 +51,8 @@ async function getSuppliersByAddress(address) {
 
 async function addNewSuppliersFromExcel(excelFile) {
 	if (_.isNull(excelFile) || _.isUndefined(excelFile) || _.isEmpty(excelFile)) {
-		logger.error('excelFile参数不存在');
-		throw new Error('没输入文件参数路径');
+		logger.error('excelFile parameter is empty');
+		throw new Error('excelFile parameter is empty');
 	}
 
 	let resultJson = {
@@ -67,8 +67,8 @@ async function addNewSuppliersFromExcel(excelFile) {
 	const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
 
 	if (_.isEmpty(jsonData)) {
-		logger.error('excel文件为空文件');
-		throw new Error('空Excel文件');
+		logger.error('Excel file content is empty, file path: ' + excelFile);
+		throw new Error('empty Excel file content');
 	}
 
 	const sheetId = await _storeSupplierSheet(excelFile);
@@ -120,8 +120,8 @@ async function addNewSuppliersFromExcel(excelFile) {
 	}
 
 	if (_.isEmpty(supplierStores)) {
-		logger.error('supplierStores与columnMapping映射关系错误');
-		throw new Error('columnMapping 映射关系出错了');
+		logger.error('supplierStores and columnMapping are incorrect');
+		throw new Error('supplierStores and columnMapping are incorrect');
 	}
 
 	const existingSuppliers = await supplierStoreModel.findAll({
@@ -137,8 +137,8 @@ async function addNewSuppliersFromExcel(excelFile) {
 			// 第一次直接初始化
 			await supplierStoreModel.bulkCreate(supplierStores);
 		} catch (error) {
-			logger.error('supplierStoreModel.bulkCreate操作异常：', error);
-			throw new Error('数据操作异常');
+			logger.error(error, '###### supplierService/addNewSuppliersFromExcel error => supplierStoreModel.bulkCreate init operation failed');
+			throw new Error('init data operation failed');
 		}
 
 		resultJson.message = '成功插入数据';
@@ -210,10 +210,10 @@ async function _storeSupplierSheet(filePath) {
 			sheetSize: fileSize
 		});
 
-		logger.info(`文件存储成功：${fileName}`);
+		logger.info(`file stored successfully, sheetId: ${sheet.sheetId}, fileName: ${fileName}`);
 		return sheet.sheetId;
 	} catch (error) {
-		logger.error(`文件存储失败：`, error);
+		logger.error(error, '###### supplierService/_storeSupplierSheet error => file store operation failed');
 		return null;
 	}
 }
@@ -265,17 +265,19 @@ function _isSameSupplierStore(a, b) {
 
 async function addNewSuppliersFromData(suppliers, sheetId) {
 	if (_.isNull(suppliers) || _.isUndefined(suppliers) || _.isEmpty(suppliers)) {
-		throw new Error('没有可以增加的供应商数据')
+		throw new Error('suppliers parameter is empty')
 	}
 
 	if (!_.isArray(suppliers)) {
-		throw new Error('增加的供应商数据格式不对，需要一个数组')
+		throw new Error('suppliers parameter is not an array')
 	}
 
 	const t = await sequelize.transaction();
+	logger.info(`start the transaction`);
 	try {
 		for (let supplier of suppliers) {
 			let newSupplier = await supplierStoreModel.create(supplier);
+			logger.info(`new supplier added, supplierId: ${newSupplier.storeId}`);
 
 			await supplierStoreHistoryModel.create({
 				storeId: newSupplier.storeId,
@@ -283,28 +285,29 @@ async function addNewSuppliersFromData(suppliers, sheetId) {
 				historyType: '新增',
 				originSupplierStoreInJson: null,
 				newSupplierStoreInJson: JSON.stringify(newSupplier)
-			}).catch(err => {
-				logger.error('记录新增历史失败:', err);
 			});
 		}
 		await t.commit();
+		logger.info(`transaction committed`);
 	} catch (error) {
 		await t.rollback();
-		logger.error('supplierStoreModel.create操作异常：', error)
-		throw new Error('增加供应商数据出错')
+		logger.info(`transaction rolled back`);
+		logger.error(error, 'addNewSuppliersFromData operation failed');
+		throw new Error('add new supplier operation failed')
 	}
 }
 
 async function updateSuppliersFromData(suppliers, sheetId) {
 	if (_.isNull(suppliers) || _.isUndefined(suppliers) || _.isEmpty(suppliers)) {
-		throw new Error('没有可以更新的供应商数据')
+		throw new Error('suppliers parameter is empty')
 	}
 
 	if (!_.isArray(suppliers)) {
-		throw new Error('增加的供应商数据格式不对，需要一个数组')
+		throw new Error('suppliers parameter is not an array')
 	}
 
 	const t = await sequelize.transaction();
+	logger.info(`start the transaction`);
 	try {
 		for (let supplier of suppliers) {
 			// 获取旧数据
@@ -313,29 +316,33 @@ async function updateSuppliersFromData(suppliers, sheetId) {
 					storeId: supplier.storeId
 				}
 			});
+			logger.info(`existing supplier found, supplierId: ${existingSupplier.storeId}`);
 
 			if (existingSupplier) {
-				let oldSupplierJson = JSON.stringify(existingSupplier);
+				let originSupplierJson = JSON.stringify(existingSupplier);
+				logger.info(`origin supplier: ${originSupplierJson}`);
+
 				existingSupplier.set(supplier);
 				await existingSupplier.save();
 				let newSupplierJson = JSON.stringify(existingSupplier);
+				logger.info(`new supplier: ${newSupplierJson}`);
 
 				await supplierStoreHistoryModel.create({
 					storeId: existingSupplier.storeId,
 					sheetId: sheetId,
 					historyType: '更新',
-					originSupplierStoreInJson: oldSupplierJson,
+					originSupplierStoreInJson: originSupplierJson,
 					newSupplierStoreInJson: newSupplierJson
-				}).catch(err => {
-					logger.error('记录更新历史失败:', err);
 				});
 			}
 		}
 		await t.commit();
+		logger.info(`transaction committed`);
 	} catch (error) {
 		await t.rollback();
-		logger.error('supplierStoreModel.update操作异常：', error)
-		throw new Error('更新供应商数据出错')
+		logger.info(`transaction rolled back`);
+		logger.error(error, 'updateSuppliersFromData operation failed');
+		throw new Error('update supplier operation failed')
 	}
 }
 
@@ -392,8 +399,8 @@ async function getSupplierStatistics() {
 			regionSupplierCount
 		};
 	} catch (error) {
-		logger.error('获取供应商统计数据失败:', error);
-		throw new Error('获取供应商统计数据失败');
+		logger.error(error, 'supplierService/getSupplierStatistics operation failed');
+		throw new Error('get supplier statistics operation failed');
 	}
 }
 
@@ -407,8 +414,8 @@ async function getAllSupplierHistories() {
 			order: [['createdAt', 'DESC']]
 		});
 	} catch (error) {
-		logger.error('获取供应商历史记录失败:', error);
-		throw new Error('获取供应商历史记录失败');
+		logger.error(error, 'supplierService/getAllSupplierHistories operation failed');
+		throw new Error('get supplier histories operation failed');
 	}
 }
 

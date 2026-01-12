@@ -31,7 +31,7 @@ const verifyTokenMidware = async (req, res, next) => {
 
 		next();
 	} catch (error) {
-		logger.error('令牌验证失败:', error);
+		logger.error(error, '###### verifyTokenMidware error');
 		res.status(401).json({ success: false, message: '令牌验证失败' });
 	}
 };
@@ -60,7 +60,7 @@ router.post('/getToken', async (req, res) => {
 			message: '令牌获取成功'
 		});
 	} catch (error) {
-		logger.error('获取令牌时出错:', error);
+		logger.error(error, '###### getToken error');
 		res.status(500).json({ success: false, message: '服务器内部错误' });
 	}
 });
@@ -87,7 +87,7 @@ router.get('/getSuppliersByName', verifyTokenMidware, async (req, res) => {
 			data: suppliers
 		});
 	} catch (error) {
-		logger.error('查询供应商名称时出错:', error);
+		logger.error(error, '###### getSuppliersByName error');
 		res.status(500).json({ success: false, message: '服务器内部错误' });
 	}
 });
@@ -112,7 +112,7 @@ router.get('/getSuppliersByAddress', verifyTokenMidware, async (req, res) => {
 			data: suppliers
 		});
 	} catch (error) {
-		logger.error('查询供应商地址时出错:', error);
+		logger.error(error, '###### getSuppliersByAddress error');
 		res.status(500).json({ success: false, message: '服务器内部错误' });
 	}
 });

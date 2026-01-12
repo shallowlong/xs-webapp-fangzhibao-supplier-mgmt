@@ -6,7 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const authenticateToken = (req, res, next) => {
 	const jwt_token = req.cookies.jwt_token; // 从 Cookie 提取
 	if (!jwt_token) {
-		logger.debug('cookie中没有找到token，跳转登录页面');
+		logger.debug('no token found in cookie, redirect to login page');
 		return res.redirect('/login');
 	}
 
@@ -15,11 +15,11 @@ const authenticateToken = (req, res, next) => {
 		if (jwt.verify(jwt_token, JWT_SECRET)) {
 			next();
 		} else {
-			logger.debug('令牌验证为False');
+			logger.debug('token verification failed');
 			return res.redirect('/login?error=登录出错啦');
 		}
 	} catch (error) {
-		logger.debug('令牌无效或过期，重定向到登录页');
+		logger.error(error, '###### authenticateToken error');
 		return res.redirect('/login?error=登录失效啦');
 	}
 };

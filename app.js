@@ -47,16 +47,14 @@ app.use((req, res, next) => {
 	next();
 });
 
-
-const loginRoute = require('./routes/loginRoute');
 const mainRoute = require('./routes/mainRoute');
 const apiRoute = require('./routes/apiRoute');
+const loginRoute = require('./routes/loginRoute');
 const historyRoute = require('./routes/historyRoute');
 app.use('/api', apiRoute);
 app.use('/login', loginRoute);
-app.use('/', mainRoute);
 app.use('/history', historyRoute);
-
+app.use('/', mainRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -4,13 +4,13 @@ const archiver = require('archiver');
 
 const filesToZip = [
 	'bin/',
+	'database/',
 	'public/',
 	'routes/',
 	'services/',
 	'uploaded_files/',
 	'views/',
 	'app.js',
-	'database.js',
 	'logger.js',
 	'package.json',
 	{ source: '.env.production', target: '.env', rename: true }

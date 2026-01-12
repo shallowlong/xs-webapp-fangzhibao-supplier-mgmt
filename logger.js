@@ -1,14 +1,14 @@
-const { existsSync, mkdirSync } = require('fs')
-const path = require('path')
+const { existsSync, mkdirSync } = require('fs');
+const path = require('path');
 
-const pino = require('pino')
+const pino = require('pino');
 
-const isProduction = process.env.NODE_ENV === 'production'
-const logLevel = isProduction ? 'info' : 'debug'
+const isProduction = process.env.NODE_ENV === 'production';
+const logLevel = isProduction ? 'info' : 'debug';
 
-const logDir = path.join(__dirname, 'logs')
+const logDir = path.join(__dirname, 'logs');
 if (!existsSync(logDir)) {
-	mkdirSync(logDir, { recursive: true })
+	mkdirSync(logDir, { recursive: true });
 }
 
 const targets = [
@@ -17,7 +17,7 @@ const targets = [
 		target: 'pino-roll',
 		options: {
 			file: path.join(logDir, 'application.log'),
-			size: 10,
+			size: 100,
 			frequency: 'daily',
 			limit: {
 				count: 30
@@ -35,7 +35,7 @@ if (!isProduction) {
 		options: {
 			colorize: true,
 			translateTime: 'SYS:yyyy-mm-dd HH:MM:ss',
-			ignore: 'pid,hostname,type',
+			ignore: 'pid,hostname',
 			encoding: 'utf8',
 			singleLine: true,
 			escapeString: false
@@ -43,14 +43,11 @@ if (!isProduction) {
 	})
 }
 
-const logger = pino({
-	level: logLevel,
-	timestamp: pino.stdTimeFunctions.isoTime,
-}, pino.transport({ targets }));
+const logger = pino(pino.transport({ targets }));
 
 const morganStream = {
 	write: (message) => {
-		logger.info({ type: 'http', msg: message });
+		logger.info({ type: 'express-morgan-log', msg: message });
 	}
 }
 

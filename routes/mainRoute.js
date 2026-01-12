@@ -38,7 +38,7 @@ router.post('/upload', authToken, async (req, res) => {
 		// Use the mv() method to place the file somewhere on your server
 		await uploadedFile.mv(uploadPath);
 	} catch (error) {
-		logger.error('文件操作错误：', error);
+		logger.error(error, '###### mainRoute/upload error');
 		respJson.message = '文件操作发生异常。。';
 		_rmUploadedFile(uploadPath);
 		res.json(respJson);
@@ -52,7 +52,7 @@ router.post('/upload', authToken, async (req, res) => {
 		respJson.success = true;
 		respJson.data = serviceResultJson;
 	} catch (error) {
-		logger.error('处理文件内容错误：', error);
+		logger.error(error, '###### mainRoute/addNewSuppliersFromExcel error');
 		respJson.message = '文件处理发生异常。。';
 		_rmUploadedFile(uploadPath);
 		res.json(respJson);
@@ -74,7 +74,7 @@ router.post('/addNewSupplier', authToken, async (req, res) => {
 		await supplierService.addNewSuppliersFromData(suppliersData, sheetId)
 		respJson.success = true
 	} catch (error) {
-		logger.error('增加供应商操作错误：', error);
+		logger.error(error, '###### mainRoute/addNewSuppliersFromData error');
 		respJson.message = '增加供应商操作发生异常。。';
 	}
 
@@ -92,7 +92,7 @@ router.post('/updateSupplier', authToken, async (req, res) => {
 		await supplierService.updateSuppliersFromData(suppliersData, sheetId)
 		respJson.success = true
 	} catch (e) {
-		logger.error('更新供应商操作错误：', e);
+		logger.error(e, '###### mainRoute/updateSuppliersFromData error');
 		respJson.message = '更新供应商操作发生异常。。';
 	}
 
@@ -102,7 +102,7 @@ router.post('/updateSupplier', authToken, async (req, res) => {
 function _rmUploadedFile(uploadPath) {
 	fs.rm(uploadPath, (err) => {
 		if (err) {
-			logger.error('删除文件失败：' + err.message);
+			logger.error(err, '###### mainRoute/_rmUploadedFile error');
 		}
 		logger.debug(`成功删除文件：${uploadPath}`);
 	});
@@ -118,7 +118,7 @@ router.get('/getSupplierStatistics', authToken, async (req, res) => {
 			data: statistics
 		});
 	} catch (error) {
-		logger.error('获取供应商统计数据时出错:', error);
+		logger.error(error, '###### mainRoute/getSupplierStatistics error');
 		res.status(500).json({ success: false, message: '服务器内部错误' });
 	}
 });

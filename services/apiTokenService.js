@@ -23,7 +23,7 @@ async function validateAndRetrieve(username, password) {
 	try {
 		const isValid = await validateUser(username, password);
 		if (!isValid) {
-			logger.info(`用户名密码错误: ${username}`);
+			logger.info(`用户名或者密码错误，username=${username}`);
 			return false;
 		}
 
@@ -54,7 +54,7 @@ async function validateAndRetrieve(username, password) {
 
 		return newToken.token;
 	} catch (error) {
-		logger.error(`生成API token失败 => 用户：${username}, 错误：${error.message}`);
+		logger.error(error, `###### apiTokenService/validateAndRetrieve error => 用户：${username}`);
 		return false;
 	}
 }
@@ -72,7 +72,7 @@ async function validateToken(token) {
 
 		return false;
 	} catch (error) {
-		logger.error(`验证API token失败 => 错误：${error.message}`);
+		logger.error(error, `###### apiTokenService/validateToken error => token: ${token}`);
 		return false;
 	}
 }
