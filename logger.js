@@ -34,7 +34,7 @@ if (!isProduction) {
 		target: 'pino-pretty',
 		options: {
 			colorize: true,
-			translateTime: 'SYS:yyyy-mm-dd HH:MM:ss',
+			translateTime: 'SYS:yyyy-mm-dd HH:MM:ss.l o',
 			ignore: 'pid,hostname',
 			encoding: 'utf8',
 			singleLine: true,
