@@ -30,7 +30,7 @@ npm start
 2. Express 5.x
 3. pino
 4. Sequelize
-5. jQuery/bootstrap5
+<del>5. jQuery/bootstrap5</del>
 
 ## Backlogs
 

@@ -1,13 +1,13 @@
-const { logger } = require('../logger')
+const { logger } = require("../logger");
 
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const authenticateToken = (req, res, next) => {
 	const jwt_token = req.cookies.jwt_token; // 从 Cookie 提取
 	if (!jwt_token) {
-		logger.debug('no token found in cookie, redirect to login page');
-		return res.redirect('/login');
+		logger.debug("no token found in cookie, redirect to login page");
+		return res.redirect("/login");
 	}
 
 	try {
@@ -15,12 +15,12 @@ const authenticateToken = (req, res, next) => {
 		if (jwt.verify(jwt_token, JWT_SECRET)) {
 			next();
 		} else {
-			logger.debug('token verification failed');
-			return res.redirect('/login?error=登录出错啦');
+			logger.debug("token verification failed");
+			return res.redirect("/login?error=登录出错啦");
 		}
 	} catch (error) {
-		logger.error(error, '###### authenticateToken error');
-		return res.redirect('/login?error=登录失效啦');
+		logger.error(error, "###### authenticateToken error");
+		return res.redirect("/login?error=登录失效啦");
 	}
 };
 

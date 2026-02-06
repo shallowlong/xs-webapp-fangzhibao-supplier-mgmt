@@ -1,5 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-	return sequelize.define('ApiToken',
+	return sequelize.define(
+		"ApiToken",
 		{
 			id: {
 				type: DataTypes.INTEGER,
@@ -18,17 +19,17 @@ module.exports = (sequelize, DataTypes) => {
 			expireAt: {
 				type: DataTypes.DATE,
 				allowNull: false,
-			}
+			},
 		},
 		{
-			tableName: 'fzb_api_token',
+			tableName: "fzb_api_token",
 			indexes: [
 				{
-					name: 'idx_token',
+					name: "idx_token",
 					unique: true,
-					fields: ['token']
-				}
-			]
-		}
+					fields: ["token"],
+				},
+			],
+		},
 	);
 };

@@ -1,5 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-	return sequelize.define('User',
+	return sequelize.define(
+		"User",
 		{
 			username: {
 				type: DataTypes.STRING(50),
@@ -9,10 +10,10 @@ module.exports = (sequelize, DataTypes) => {
 			password: {
 				type: DataTypes.STRING(100),
 				allowNull: false,
-			}
+			},
 		},
 		{
-			tableName: 'fzb_user'
-		}
+			tableName: "fzb_user",
+		},
 	);
 };

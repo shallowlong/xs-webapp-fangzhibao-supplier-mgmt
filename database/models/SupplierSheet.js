@@ -1,5 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-	return sequelize.define('SupplierSheet',
+	return sequelize.define(
+		"SupplierSheet",
 		{
 			sheetId: {
 				type: DataTypes.INTEGER,
@@ -12,16 +13,16 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 			},
 			sheetBinary: {
-				type: DataTypes.BLOB('medium'),
+				type: DataTypes.BLOB("medium"),
 				allowNull: false,
 			},
 			sheetSize: {
 				type: DataTypes.BIGINT,
 				allowNull: false,
-			}
+			},
 		},
 		{
-			tableName: 'fzb_supplier_sheet'
-		}
+			tableName: "fzb_supplier_sheet",
+		},
 	);
 };

@@ -1,6 +1,6 @@
-const { logger } = require('../logger');
-const bcrypt = require('bcryptjs');
-const { User } = require('../database');
+const { logger } = require("../logger");
+const bcrypt = require("bcryptjs");
+const { User } = require("../database");
 
 const userModel = User;
 
@@ -10,12 +10,12 @@ async function validateUser(username, password) {
 	logger.debug(`encryptedPassword = ${encryptedPassword}`);
 
 	const user = await userModel.findOne({
-		where: { username: username }
+		where: { username: username },
 	});
 
-	return user && await bcrypt.compare(password, user.password);
+	return user && (await bcrypt.compare(password, user.password));
 }
 
 module.exports = {
-	validateUser
-}
+	validateUser,
+};

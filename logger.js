@@ -1,12 +1,12 @@
-const { existsSync, mkdirSync } = require('fs');
-const path = require('path');
+const { existsSync, mkdirSync } = require("fs");
+const path = require("path");
 
-const pino = require('pino');
+const pino = require("pino");
 
-const isProduction = process.env.NODE_ENV === 'production';
-const logLevel = isProduction ? 'info' : 'debug';
+const isProduction = process.env.NODE_ENV === "production";
+const logLevel = isProduction ? "info" : "debug";
 
-const logDir = path.join(__dirname, 'logs');
+const logDir = path.join(__dirname, "logs");
 if (!existsSync(logDir)) {
 	mkdirSync(logDir, { recursive: true });
 }
@@ -14,41 +14,41 @@ if (!existsSync(logDir)) {
 const targets = [
 	{
 		level: logLevel,
-		target: 'pino-roll',
+		target: "pino-roll",
 		options: {
-			file: path.join(logDir, 'application.log'),
+			file: path.join(logDir, "application.log"),
 			size: 100,
-			frequency: 'daily',
+			frequency: "daily",
 			limit: {
-				count: 30
+				count: 30,
 			},
-			dateFormat: 'yyyy-MM-dd',
-			encoding: 'utf8'
-		}
-	}
-]
+			dateFormat: "yyyy-MM-dd",
+			encoding: "utf8",
+		},
+	},
+];
 
 if (!isProduction) {
 	targets.push({
 		level: logLevel,
-		target: 'pino-pretty',
+		target: "pino-pretty",
 		options: {
 			colorize: true,
-			translateTime: 'SYS:yyyy-mm-dd HH:MM:ss.l o',
-			ignore: 'pid,hostname',
-			encoding: 'utf8',
+			translateTime: "SYS:yyyy-mm-dd HH:MM:ss.l o",
+			ignore: "pid,hostname",
+			encoding: "utf8",
 			singleLine: true,
-			escapeString: false
-		}
-	})
+			escapeString: false,
+		},
+	});
 }
 
 const logger = pino(pino.transport({ targets }));
 
 const morganStream = {
 	write: (message) => {
-		logger.info({ type: 'express-morgan-log', msg: message });
-	}
-}
+		logger.info({ type: "express-morgan-log", msg: message });
+	},
+};
 
-module.exports = { logger, morganStream }
+module.exports = { logger, morganStream };

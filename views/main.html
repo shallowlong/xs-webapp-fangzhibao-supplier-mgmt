@@ -1,129 +1,174 @@
 <%- include('header.html', {addCss: ["main"]}) -%>
 
-	<div class="container">
-		<div class="page-header">
-			<h1>纺支宝ERP供货商管理WebApp</h1>
-			<% if (!isProduction) { %>
-				<span class="dev-badge">DEV</span>
-			<% } %>
-			<p class="lead text-muted">查看供应商的哪些信息发生了变化</p>
-		</div>
+<div class="container">
+	<div class="page-header">
+		<h1>纺支宝ERP供货商管理WebApp</h1>
+		<% if (!isProduction) { %>
+		<span class="dev-badge">DEV</span>
+		<% } %>
+		<p class="lead text-muted">查看合作供应商的哪些信息发生了变化</p>
+	</div>
 
-		<hr class="my-4">
+	<hr class="my-4" />
 
-		<div class="row">
-			<div class="col-md-6">
-				<div class="card">
-					<div class="card-header">
-						<h5 class="mb-0">供应商汇总</h5>
-					</div>
-					<div class="card-body">
-						<div class="data-display">
-							<div class="data-item">
-								<strong>最后更新时间：</strong>
-								<span id="lastUpdateTime">loading...</span>
-							</div>
-							<div class="data-item">
-								<strong>合作总数：</strong>
-								<span id="totalCooperation">loading...</span>
-							</div>
-							<div class="data-item">
-								<strong>失效总数：</strong>
-								<span id="totalInvalid">loading...</span>
-							</div>
-							<div class="data-item">
-								<strong>区域的供应商数量：</strong>
-								<span id="regionSupplierCount">loading...</span>
-							</div>
-						</div>
-					</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="card">
+				<div class="card-header">
+					<h5 class="mb-0">合作供应商汇总</h5>
 				</div>
-			</div>
-
-			<div class="col-md-6">
-				<div class="card">
-					<div class="card-header">
-						<h5 class="mb-0">上传供应商文件</h5>
-					</div>
-					<div class="card-body">
-						<div class="upload-area" id="uploadArea">
-							<div class="upload-icon">
-								<i class="fas fa-file-excel"></i>
-							</div>
-							<h5>拖放Excel文件到此处，或点击上传</h5>
-							<p class="text-muted">支持的文件格式：.xlsx, .xls, .csv</p>
-							<input type="file" class="file-input" id="fileInput" accept=".xlsx, .xls, .csv">
-							<span class="hidden" id="sheetId"></span>
+				<div class="card-body">
+					<div class="data-display">
+						<div class="data-item">
+							<strong>最后更新时间：</strong>
+							<span id="lastUpdateTime">loading...</span>
 						</div>
-
-						<div class="upload-message alert" id="uploadMessage" role="alert"></div>
-
-						<div class="spinner-container">
-							<div class="spinner-border text-primary" role="status">
-								<span class="visually-hidden">上传中...</span>
-							</div>
-							<p class="mt-2">正在上传文件，请稍候...</p>
+						<div class="data-item">
+							<strong>合作总数：</strong>
+							<span id="totalCooperation">loading...</span>
+						</div>
+						<div class="data-item">
+							<strong>失效总数：</strong>
+							<span id="totalInvalid">loading...</span>
+						</div>
+						<div class="data-item">
+							<strong>区域的供应商数量：</strong>
+							<span id="regionSupplierCount">loading...</span>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="card hidden" id="addSupplierCard">
-			<div class="card-header">
-				<h5 class="mb-0">新增供应商列表</h5>
-			</div>
-			<div class="card-body">
-				<table id="addSupplierTable" class="table table-striped table-hover"></table>
-			</div>
-		</div>
+		<div class="col-md-6">
+			<div class="card">
+				<div class="card-header">
+					<h5 class="mb-0">上传供应商文件</h5>
+				</div>
+				<div class="card-body">
+					<div class="upload-area" id="uploadArea">
+						<div class="upload-icon">
+							<i class="fas fa-file-excel"></i>
+						</div>
+						<h5>拖放Excel文件到此处，或点击上传</h5>
+						<p class="text-muted">
+							支持的文件格式：.xlsx, .xls, .csv
+						</p>
+						<input
+							type="file"
+							class="file-input"
+							id="fileInput"
+							accept=".xlsx, .xls, .csv" />
+						<span class="hidden" id="sheetId"></span>
+					</div>
 
-		<div class="card hidden" id="updateSupplierCard">
-			<div class="card-header">
-				<h5 class="mb-0">有更新的供应商列表</h5>
-			</div>
-			<div class="card-body">
-				<table id="updateSupplierTable" class="table table-striped table-hover"></table>
-			</div>
-		</div>
+					<div
+						class="upload-message alert"
+						id="uploadMessage"
+						role="alert"></div>
 
-		<hr class="my-4">
-		<div class="card">
-			<div class="card-header d-flex justify-content-between align-items-center">
-				<h5 class="mb-0">供应商列表</h5>
-				<a href="/history" class="btn btn-info btn-sm">查看操作历史</a>
-			</div>
-			<div class="card-body">
-				<table id="supplierStoreTable" class="hidden">
-					<thead>
-						<tr class="table-primary">
-							<th data-field="storeId">门店ID</th>
-							<th data-field="supplierName">供应商</th>
-							<th data-field="storeName">门店名称</th>
-							<th data-field="storeNo">档口号</th>
-							<th data-field="storeAddress">门店地址</th>
-							<th data-field="sectionCode" data-filter-control="select">区域编码</th>
-							<th data-field="storeSequence">门店顺序</th>
-							<th data-field="supplierType" data-filter-control="select">供应商类型</th>
-							<th data-field="othersTakeGood" data-filter-control="select">是否代拿</th>
-							<th data-field="usingUserExpress" data-filter-control="select">直发订单开启<br>用户快递</th>
-							<th data-field="autoPushAndPrint" data-filter-control="select">自动推送<br>订单打印</th>
-							<th data-field="autoSyncToSupplier" data-filter-control="select">待拿货数据<br>同步供应商</th>
-							<th data-field="allowToChangePrice" data-filter-control="select">允许改价</th>
-							<th data-field="paymentPoint" data-filter-control="select">采购付款节点</th>
-							<th data-field="contactPhoneNum">联系电话</th>
-						</tr>
-					</thead>
-					<tbody>
-						<% if (suppliers) { %>
-							<% suppliers.forEach(function(supplier){ %>
-								<%- include('row.html', {supplier: supplier}) -%>
-							<% }); %>
-						<% } %>
-					</tbody>
-				</table>
+					<div class="spinner-container">
+						<div class="spinner-border text-primary" role="status">
+							<span class="visually-hidden">上传中...</span>
+						</div>
+						<p class="mt-2">正在上传文件，请稍候...</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 
-	<%- include('footer.html', {addJs: ['main']}) -%>
+	<div class="card hidden" id="addSupplierCard">
+		<div class="card-header">
+			<h5 class="mb-0">新增供应商列表</h5>
+		</div>
+		<div class="card-body">
+			<table
+				id="addSupplierTable"
+				class="table table-striped table-hover"></table>
+		</div>
+	</div>
+
+	<div class="card hidden" id="updateSupplierCard">
+		<div class="card-header">
+			<h5 class="mb-0">有更新的供应商列表</h5>
+		</div>
+		<div class="card-body">
+			<table
+				id="updateSupplierTable"
+				class="table table-striped table-hover"></table>
+		</div>
+	</div>
+
+	<hr class="my-4" />
+	<div class="card">
+		<div
+			class="card-header d-flex justify-content-between align-items-center">
+			<h5 class="mb-0">供应商列表</h5>
+			<a href="/history" class="btn btn-info btn-sm">查看操作历史</a>
+		</div>
+		<div class="card-body">
+			<table id="supplierStoreTable" class="hidden">
+				<thead>
+					<tr class="table-primary">
+						<th data-field="storeId">门店ID</th>
+						<th data-field="supplierName">供应商</th>
+						<th data-field="storeName">门店名称</th>
+						<th data-field="storeNo">档口号</th>
+						<th data-field="storeAddress">门店地址</th>
+						<th
+							data-field="sectionCode"
+							data-filter-control="select">
+							区域编码
+						</th>
+						<th data-field="storeSequence">门店顺序</th>
+						<th
+							data-field="supplierType"
+							data-filter-control="select">
+							供应商类型
+						</th>
+						<th
+							data-field="othersTakeGood"
+							data-filter-control="select">
+							是否代拿
+						</th>
+						<th
+							data-field="usingUserExpress"
+							data-filter-control="select">
+							直发订单开启<br />用户快递
+						</th>
+						<th
+							data-field="autoPushAndPrint"
+							data-filter-control="select">
+							自动推送<br />订单打印
+						</th>
+						<th
+							data-field="autoSyncToSupplier"
+							data-filter-control="select">
+							待拿货数据<br />同步供应商
+						</th>
+						<th
+							data-field="allowToChangePrice"
+							data-filter-control="select">
+							允许改价
+						</th>
+						<th
+							data-field="paymentPoint"
+							data-filter-control="select">
+							采购付款节点
+						</th>
+						<th data-field="contactPhoneNum">联系电话</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% if (suppliers) { %> <%
+					suppliers.forEach(function(supplier){ %> <%-
+					include('row.html', {supplier: supplier}) -%> <% }); %> <% }
+					%>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<%- include('footer.html', {addJs: ['main']}) -%>

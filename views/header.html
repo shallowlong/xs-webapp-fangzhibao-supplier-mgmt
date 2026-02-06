@@ -1,44 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="author" content="奚叔2099" />
+		<meta name="description" content="纺支宝ERP供应商管理WebApp" />
+		<meta name="keywords" content="纺支宝ERP, 供应商管理" />
+		<link rel="icon" href="data:," />
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="author" content="奚叔2099">
-	<meta name="description" content="纺支宝ERP供应商管理WebApp">
-	<meta name="keywords" content="纺支宝ERP, 供应商管理">
-	<link rel="icon" href="data:,">
+		<title>纺支宝ERP供应商管理WebApp</title>
 
-	<title>纺支宝ERP供应商管理WebApp</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<% if(typeof(isLogin) === 'undefined') { %>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.24.2/bootstrap-table.min.css" integrity="sha512-ThXPnGXIJOi9huerzcKWpEqyPCaCECA9/Z3Sn5P8T37S2cm57p8Zz8g5r7woyEg+F5u7n5sRYg/LW/pCmpZnDA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.24.2/extensions/filter-control/bootstrap-table-filter-control.min.css" integrity="sha512-VDe7nQKAAMUvg5iwah7VoNOIk0+pKVIoLsdTueh/+ajepxIWWeyaEeDBOAO1/jv6prU93FO5DcWyBaQ8liRiBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<% } %>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+			integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer" />
+		<% if(typeof(isLogin) === 'undefined') { %>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.24.2/bootstrap-table.min.css"
+			integrity="sha512-ThXPnGXIJOi9huerzcKWpEqyPCaCECA9/Z3Sn5P8T37S2cm57p8Zz8g5r7woyEg+F5u7n5sRYg/LW/pCmpZnDA=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.24.2/extensions/filter-control/bootstrap-table-filter-control.min.css"
+			integrity="sha512-VDe7nQKAAMUvg5iwah7VoNOIk0+pKVIoLsdTueh/+ajepxIWWeyaEeDBOAO1/jv6prU93FO5DcWyBaQ8liRiBA=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
+			integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer" />
+		<% } %>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+		<link rel="stylesheet" href="/css/style.css" />
 
-	<link rel="stylesheet" href="/css/style.css">
-<% if(typeof(addCss) !== 'undefined') { %>
-	<% addCss.forEach(function(css){ %>
-	<link rel="stylesheet" href="/css/<%= css %>.css">
-	<% }); %>
-<% } %>
+		<!-- prettier-ignore -->
+		<% if(typeof(addCss) !== 'undefined') { %>
+			<% addCss.forEach(function(css){ %>
+		<link rel="stylesheet" href="/css/<%= css %>.css" />
+		<% }); %> <% } %>
 
-<% if(isProduction) { %>
-	<script type="text/javascript">
-		(function(b,a,i,d,u,t,j) {
-			b[i]=b[i]||[];
-			t=a.createElement(d);t.async=1;t.src="https://hm.baidu.com/hm.js?"+u;
-			j=a.getElementsByTagName(d)[0];j.parentNode.insertBefore(t,j);
-		})(window, document, "_hmt", "script", "656634e390f01e3821a0ebc42221c0cf");
-		(function(c,l,a,r,i,t,y){
-			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-			t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-			y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-		})(window, document, "clarity", "script", "t739qhlpy2");
-	</script>
-<% } %>
-</head>
+		<!-- prettier-ignore -->
+		<% if(isProduction) { %>
 
-<body class="margin">
+		<!-- prettier-ignore -->
+		<script type="text/javascript">
+			(function(b,a,i,d,u,t,j) {
+				b[i]=b[i]||[];
+				t=a.createElement(d);t.async=1;t.src="https://hm.baidu.com/hm.js?"+u;
+				j=a.getElementsByTagName(d)[0];j.parentNode.insertBefore(t,j);
+			})(window, document, "_hmt", "script", "656634e390f01e3821a0ebc42221c0cf");
+			(function(c,l,a,r,i,t,y){
+				c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+				t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+				y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+			})(window, document, "clarity", "script", "t739qhlpy2");
+		</script>
+
+		<% } %>
+	</head>
+
+	<body class="margin"></body>
+</html>
