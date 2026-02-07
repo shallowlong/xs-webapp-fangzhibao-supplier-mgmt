@@ -117,8 +117,14 @@ $(document).ready(function () {
 		$("#modalTitle").text(title);
 		$("#modalBody").html(`<p class="text-${type}">${message}</p>`);
 
-		// 显示模态框
-		$("#notificationModal").modal("show");
+		const modal = new bootstrap.Modal(
+			document.getElementById("notificationModal"),
+		);
+		modal.show();
+
+		$("#notificationModal").on("shown.bs.modal", function () {
+			$("#modalConfirmBtn").focus();
+		});
 	}
 
 	function showMessage(text, type) {
@@ -546,14 +552,16 @@ $(document).ready(function () {
 		$("#totalInvalid").text(data.totalInvalid || 0);
 
 		if (data.regionSupplierCount && data.regionSupplierCount.length > 0) {
-			const regionText = data.regionSupplierCount
+			const regionHtml = data.regionSupplierCount
 				.map((region) => {
-					return `【${region.sectionCode}: ${region.count}个】`;
+					return `<div>${region.sectionCode}: ${region.count}</div>`;
 				})
-				.join(", ");
-			$("#regionSupplierCount").text(regionText);
+				.join("");
+			$("#regionSupplierCount").html(regionHtml);
 		} else {
-			$("#regionSupplierCount").text("暂无数据");
+			$("#regionSupplierCount").html(
+				"<div class='region-item'>暂无数据</div>",
+			);
 		}
 	}
 });
