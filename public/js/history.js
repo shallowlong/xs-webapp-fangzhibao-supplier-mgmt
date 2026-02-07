@@ -1,5 +1,4 @@
 $(document).ready(function () {
-	// 初始化历史记录表格
 	$("#historyTable").bootstrapTable({
 		url: "/history/data",
 		method: "GET",
