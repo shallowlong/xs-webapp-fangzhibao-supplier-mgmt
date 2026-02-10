@@ -1,0 +1,68 @@
+.container {
+	max-width: 1800px;
+}
+
+.page-header {
+	margin-bottom: 2rem;
+	text-align: center;
+	position: relative;
+}
+
+.page-header h1 {
+	display: inline-block;
+	position: relative;
+}
+
+.dev-badge {
+	display: inline-block;
+	background-color: #fd7e14 !important;
+	color: white !important;
+	font-size: 0.75rem;
+	font-weight: bold;
+	padding: 0.25rem 0.5rem;
+	border-radius: 0.375rem;
+	margin-left: 0.5rem;
+	vertical-align: super;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+	border-radius: 10px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	margin-bottom: 2rem;
+}
+
+.card-header {
+	background-color: #f1f5f9;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+.table {
+	margin-bottom: 0;
+}
+
+.table thead th {
+	background-color: #f8f9fa;
+	font-weight: 600;
+	vertical-align: middle;
+}
+
+.table tbody td {
+	vertical-align: middle;
+}
+
+.table-danger th {
+	background-color: #f8d7da !important;
+	color: #721c24;
+}
+
+@media (max-width: 768px) {
+	.container {
+		padding: 0 1rem;
+	}
+
+	.table-responsive {
+		display: block;
+		overflow-x: auto;
+	}
+}

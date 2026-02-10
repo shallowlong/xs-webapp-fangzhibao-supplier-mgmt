@@ -16,6 +16,13 @@ router.get("/", authToken, async (req, res, next) => {
 	});
 });
 
+router.get("/invalid", authToken, async (req, res, next) => {
+	let invalidSuppliers = await supplierService.getAllSuppliers(false);
+	res.render("invalid", {
+		invalidSuppliers: invalidSuppliers,
+	});
+});
+
 router.post("/upload", authToken, async (req, res) => {
 	let respJson = {
 		success: false,

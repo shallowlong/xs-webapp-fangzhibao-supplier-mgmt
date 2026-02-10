@@ -1,0 +1,58 @@
+<%- include('header.html', {addCss: ["invalid"]}) -%>
+
+<div class="container">
+	<div class="page-header">
+		<h1>纺支宝ERP供货商管理WebApp</h1>
+		<% if (!isProduction) { %>
+		<span class="dev-badge">DEV</span>
+		<% } %>
+		<p class="lead text-muted">查看供应商的哪些信息发生了变化</p>
+	</div>
+
+	<hr class="my-4" />
+
+	<div class="card">
+		<div
+			class="card-header d-flex justify-content-between align-items-center">
+			<h5 class="mb-0">失效供应商列表</h5>
+			<a href="/" class="btn btn-secondary btn-sm">返回主页</a>
+		</div>
+		<div class="card-body">
+			<table
+				id="invalidSupplierTable"
+				class="table table-bordered table-hover">
+				<thead>
+					<tr class="table-info">
+						<th data-field="storeId">门店ID</th>
+						<th data-field="supplierName">供应商</th>
+						<th data-field="storeName">门店名称</th>
+						<th data-field="storeNo" data-sortable="true">
+							档口号
+						</th>
+						<th data-field="storeAddress" data-sortable="true">
+							门店地址
+						</th>
+						<th data-field="supplierType">供应商类型</th>
+						<th data-field="contactPhoneNum">联系电话</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% if (invalidSuppliers) { %> <%
+					invalidSuppliers.forEach(function(supplier){ %>
+					<tr>
+						<td><%= supplier.storeId %></td>
+						<td><%= supplier.supplierName %></td>
+						<td><%= supplier.storeName %></td>
+						<td><%= supplier.storeNo %></td>
+						<td><%= supplier.storeAddress %></td>
+						<td><%= supplier.supplierType %></td>
+						<td><%= supplier.contactPhoneNum %></td>
+					</tr>
+					<% }); %> <% } %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<%- include('footer.html', {addJs: ['invalid']}) -%>

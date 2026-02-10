@@ -24,6 +24,8 @@ async function getAllSuppliers(isCooperated = false) {
 				[Op.and]: [
 					{ supplierName: { [Op.notLike]: "%不做了%" } },
 					{ supplierName: { [Op.notLike]: "%终止合作%" } },
+					{ supplierName: { [Op.notLike]: "%倒闭%" } },
+					{ storeName: { [Op.notLike]: "%不做了%" } },
 				],
 			},
 			order: [
@@ -37,6 +39,8 @@ async function getAllSuppliers(isCooperated = false) {
 				[Op.or]: [
 					{ supplierName: { [Op.like]: "%不做了%" } },
 					{ supplierName: { [Op.like]: "%终止合作%" } },
+					{ supplierName: { [Op.like]: "%倒闭%" } },
+					{ storeName: { [Op.like]: "%不做了%" } },
 				],
 			},
 			order: [["supplierName", "ASC"]],
@@ -408,6 +412,8 @@ async function getSupplierStatistics() {
 					[Op.and]: [
 						{ supplierName: { [Op.notLike]: "%不做了%" } },
 						{ supplierName: { [Op.notLike]: "%终止合作%" } },
+						{ supplierName: { [Op.notLike]: "%倒闭%" } },
+						{ storeName: { [Op.notLike]: "%不做了%" } },
 					],
 				},
 				order: [["updatedAt", "DESC"]],
@@ -419,6 +425,8 @@ async function getSupplierStatistics() {
 					[Op.or]: [
 						{ supplierName: { [Op.like]: "%不做了%" } },
 						{ supplierName: { [Op.like]: "%终止合作%" } },
+						{ supplierName: { [Op.like]: "%倒闭%" } },
+						{ storeName: { [Op.like]: "%不做了%" } },
 					],
 				},
 				order: [["updatedAt", "DESC"]],
@@ -430,6 +438,8 @@ async function getSupplierStatistics() {
 				[Op.and]: [
 					{ supplierName: { [Op.notLike]: "%不做了%" } },
 					{ supplierName: { [Op.notLike]: "%终止合作%" } },
+					{ supplierName: { [Op.notLike]: "%倒闭%" } },
+					{ storeName: { [Op.notLike]: "%不做了%" } },
 				],
 			},
 		});
@@ -439,6 +449,8 @@ async function getSupplierStatistics() {
 				[Op.or]: [
 					{ supplierName: { [Op.like]: "%不做了%" } },
 					{ supplierName: { [Op.like]: "%终止合作%" } },
+					{ supplierName: { [Op.like]: "%倒闭%" } },
+					{ storeName: { [Op.like]: "%不做了%" } },
 				],
 			},
 		});
@@ -452,6 +464,8 @@ async function getSupplierStatistics() {
 				[Op.and]: [
 					{ supplierName: { [Op.notLike]: "%不做了%" } },
 					{ supplierName: { [Op.notLike]: "%终止合作%" } },
+					{ supplierName: { [Op.notLike]: "%倒闭%" } },
+					{ storeName: { [Op.notLike]: "%不做了%" } },
 				],
 				sectionCode: {
 					[Op.ne]: "",

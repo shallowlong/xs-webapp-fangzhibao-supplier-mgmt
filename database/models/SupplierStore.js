@@ -80,8 +80,11 @@ module.exports = (sequelize, DataTypes) => {
 			tableName: "fzb_supplier_store",
 			indexes: [
 				{
+					name: "idx_supplierName",
+					fields: ["supplierName"],
+				},
+				{
 					name: "idx_storeName",
-					unique: true,
 					fields: ["storeName"],
 				},
 			],
