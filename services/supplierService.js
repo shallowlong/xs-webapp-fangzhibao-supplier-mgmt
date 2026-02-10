@@ -43,7 +43,7 @@ async function getAllSuppliers(isCooperated = false) {
 					{ storeName: { [Op.like]: "%不做了%" } },
 				],
 			},
-			order: [["supplierName", "ASC"]],
+			order: [["storeId", "DESC"]],
 		});
 	}
 }
@@ -204,7 +204,7 @@ async function addNewSuppliersFromExcel(excelFile) {
 		}
 	}
 
-	resultJson.message = `新增 ${newOnes.length} 条数据项 | 更新 ${changedOnes.length} 条数据项`;
+	resultJson.message = `新增 ${newOnes.length} 条数据项 | 更新 ${changedOnes.length / 2} 条数据项`;
 	if (newOnes.length > 0) {
 		resultJson.newOnes = newOnes;
 	}
