@@ -17,13 +17,31 @@ const supplierStoreHistoryModel = SupplierStoreHistory;
 
 const MEDIUM_BLOB_MAX_SIZE = 16 * 1024 * 1024 - 1;
 
-async function getAllSuppliers() {
-	return await supplierStoreModel.findAll({
-		order: [
-			["sectionCode", "ASC"],
-			["storeSequence", "ASC"],
-		],
-	});
+async function getAllSuppliers(isCooperated = false) {
+	if (isCooperated) {
+		return await supplierStoreModel.findAll({
+			where: {
+				[Op.and]: [
+					{ supplierName: { [Op.notLike]: "%不做了%" } },
+					{ supplierName: { [Op.notLike]: "%终止合作%" } },
+				],
+			},
+			order: [
+				["sectionCode", "ASC"],
+				["storeSequence", "ASC"],
+			],
+		});
+	} else {
+		return await supplierStoreModel.findAll({
+			where: {
+				[Op.or]: [
+					{ supplierName: { [Op.like]: "%不做了%" } },
+					{ supplierName: { [Op.like]: "%终止合作%" } },
+				],
+			},
+			order: [["supplierName", "ASC"]],
+		});
+	}
 }
 
 async function getSuppliersByName(name) {
@@ -182,17 +200,11 @@ async function addNewSuppliersFromExcel(excelFile) {
 		}
 	}
 
-	if (newOnes.length === 0) {
-		resultJson.message = resultJson.message.concat("无新增数据项|");
-	} else {
-		resultJson.message = resultJson.message.concat("有 新增 数据项|");
+	resultJson.message = `新增 ${newOnes.length} 条数据项 | 更新 ${changedOnes.length} 条数据项`;
+	if (newOnes.length > 0) {
 		resultJson.newOnes = newOnes;
 	}
-
-	if (changedOnes.length === 0) {
-		resultJson.message = resultJson.message.concat("无更新数据项|");
-	} else {
-		resultJson.message = resultJson.message.concat("有 更新 数据项|");
+	if (changedOnes.length > 0) {
 		resultJson.changedOnes = changedOnes;
 	}
 
@@ -390,22 +402,44 @@ async function updateSuppliersFromData(suppliers, sheetId) {
  */
 async function getSupplierStatistics() {
 	try {
-		const lastUpdatedSupplier = await supplierStoreModel.findOne({
-			order: [["updatedAt", "DESC"]],
-			attributes: ["updatedAt"],
-		});
+		const lastUpdatedSupplierInCooperation =
+			await supplierStoreModel.findOne({
+				where: {
+					[Op.and]: [
+						{ supplierName: { [Op.notLike]: "%不做了%" } },
+						{ supplierName: { [Op.notLike]: "%终止合作%" } },
+					],
+				},
+				order: [["updatedAt", "DESC"]],
+				attributes: ["updatedAt"],
+			});
+		const lastUpdatedSupplierNotInCooperation =
+			await supplierStoreModel.findOne({
+				where: {
+					[Op.or]: [
+						{ supplierName: { [Op.like]: "%不做了%" } },
+						{ supplierName: { [Op.like]: "%终止合作%" } },
+					],
+				},
+				order: [["updatedAt", "DESC"]],
+				attributes: ["updatedAt"],
+			});
 
 		const totalCooperation = await supplierStoreModel.count({
 			where: {
-				supplierType: "代发",
+				[Op.and]: [
+					{ supplierName: { [Op.notLike]: "%不做了%" } },
+					{ supplierName: { [Op.notLike]: "%终止合作%" } },
+				],
 			},
 		});
 
 		const totalInvalid = await supplierStoreModel.count({
 			where: {
-				supplierType: {
-					[Op.ne]: "代发",
-				},
+				[Op.or]: [
+					{ supplierName: { [Op.like]: "%不做了%" } },
+					{ supplierName: { [Op.like]: "%终止合作%" } },
+				],
 			},
 		});
 
@@ -415,7 +449,10 @@ async function getSupplierStatistics() {
 				[sequelize.fn("COUNT", sequelize.col("sectionCode")), "count"],
 			],
 			where: {
-				supplierType: "代发",
+				[Op.and]: [
+					{ supplierName: { [Op.notLike]: "%不做了%" } },
+					{ supplierName: { [Op.notLike]: "%终止合作%" } },
+				],
 				sectionCode: {
 					[Op.ne]: "",
 				},
@@ -431,8 +468,11 @@ async function getSupplierStatistics() {
 		}));
 
 		return {
-			lastUpdateTime: lastUpdatedSupplier
-				? lastUpdatedSupplier.updatedAt
+			lastUpdateTimeInCooperation: lastUpdatedSupplierInCooperation
+				? lastUpdatedSupplierInCooperation.updatedAt
+				: null,
+			lastUpdateTimeInInvalid: lastUpdatedSupplierNotInCooperation
+				? lastUpdatedSupplierNotInCooperation.updatedAt
 				: null,
 			totalCooperation,
 			totalInvalid,

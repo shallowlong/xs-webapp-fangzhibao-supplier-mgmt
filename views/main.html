@@ -13,23 +13,46 @@
 
 	<div class="row">
 		<div class="col-md-8">
-			<div class="card mb-4">
-				<div class="card-header">
-					<h5 class="mb-0">合作供应商汇总</h5>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-header">
+							<h5 class="mb-0">合作供应商汇总</h5>
+						</div>
+						<div class="card-body">
+							<div class="data-display">
+								<div class="data-item">
+									<strong>最后更新时间：</strong>
+									<span id="lastUpdateTime">loading...</span>
+								</div>
+								<div class="data-item">
+									<strong>合作总数：</strong>
+									<span id="totalCooperation"
+										>loading...</span
+									>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div class="card-body">
-					<div class="data-display">
-						<div class="data-item">
-							<strong>最后更新时间：</strong>
-							<span id="lastUpdateTime">loading...</span>
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-header">
+							<h5 class="mb-0">失效供应商汇总</h5>
 						</div>
-						<div class="data-item">
-							<strong>合作总数：</strong>
-							<span id="totalCooperation">loading...</span>
-						</div>
-						<div class="data-item">
-							<strong>失效总数：</strong>
-							<span id="totalInvalid">loading...</span>
+						<div class="card-body">
+							<div class="data-display">
+								<div class="data-item">
+									<strong>最后更新时间：</strong>
+									<span id="invalidLastUpdateTime"
+										>loading...</span
+									>
+								</div>
+								<div class="data-item">
+									<strong>失效总数：</strong>
+									<span id="totalInvalid">loading...</span>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -109,7 +132,6 @@
 		</div>
 	</div>
 
-	<hr class="my-4" />
 	<div class="card">
 		<div
 			class="card-header d-flex justify-content-between align-items-center">

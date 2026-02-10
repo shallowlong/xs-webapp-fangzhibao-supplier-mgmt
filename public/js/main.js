@@ -538,17 +538,27 @@ $(document).ready(function () {
 			$("#lastUpdateTime").text(displayText);
 			$("#totalCooperation").text(displayText);
 			$("#totalInvalid").text(displayText);
+			$("#invalidLastUpdateTime").text(displayText);
 			$("#regionSupplierCount").text(displayText);
 			return;
 		}
 
-		if (data.lastUpdateTime) {
-			const updateTime = new Date(data.lastUpdateTime);
+		if (data.lastUpdateTimeInCooperation) {
+			const updateTime = new Date(data.lastUpdateTimeInCooperation);
 			$("#lastUpdateTime").text(updateTime.toLocaleString("zh-CN"));
 		} else {
 			$("#lastUpdateTime").text("暂无数据");
 		}
 		$("#totalCooperation").text(data.totalCooperation || 0);
+
+		if (data.lastUpdateTimeInInvalid) {
+			const invalidUpdateTime = new Date(data.lastUpdateTimeInInvalid);
+			$("#invalidLastUpdateTime").text(
+				invalidUpdateTime.toLocaleString("zh-CN"),
+			);
+		} else {
+			$("#invalidLastUpdateTime").text("暂无数据");
+		}
 		$("#totalInvalid").text(data.totalInvalid || 0);
 
 		if (data.regionSupplierCount && data.regionSupplierCount.length > 0) {

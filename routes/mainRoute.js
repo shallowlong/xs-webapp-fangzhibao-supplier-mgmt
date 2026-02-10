@@ -10,7 +10,7 @@ const authToken = require("./authRoute");
 const supplierService = require("../services/supplierService");
 
 router.get("/", authToken, async (req, res, next) => {
-	let suppliers = await supplierService.getAllSuppliers();
+	let suppliers = await supplierService.getAllSuppliers(true);
 	res.render("main", {
 		suppliers: suppliers,
 	});
