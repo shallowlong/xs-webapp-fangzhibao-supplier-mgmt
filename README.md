@@ -18,10 +18,10 @@ npm start
 
 ## 基础配置
 
-- 通过 ``` .env.sample ``` 复制一个 ``` .env ``` 到项目目录，修改配置信息即可
+- 通过 `.env.sample` 复制一个 `.env` 到项目目录，修改配置信息即可
 - MySQL（只需要定义数据库，运行会自动建立对应的数据表）
-	- CREATE DATABASE IF NOT EXISTS fangzhibao_suppliers_mgmt;
-	- 默认数据库用户名/密码：fzb_dbuser/fzb_dbpass
+    - CREATE DATABASE IF NOT EXISTS fangzhibao_suppliers_mgmt;
+    - 默认数据库用户名/密码：fzb_dbuser/fzb_dbpass
 - 默认登录用户名/密码：admin/pass1234
 
 ## 技术栈
@@ -30,7 +30,7 @@ npm start
 2. Express 5.x
 3. pino
 4. Sequelize
-<del>5. jQuery/bootstrap5</del>
+   <del>5. jQuery/bootstrap5</del>
 
 ## Backlogs
 
